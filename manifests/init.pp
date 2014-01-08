@@ -8,7 +8,7 @@ class wget (
   $version = 'installed',
 ) {
   case $::osfamily {
-    'RedHat', 'Debian': {
+    'RedHat', 'Debian', 'Suse': {
       $default_package = 'wget'
     }
     'Solaris': {

@@ -14,6 +14,13 @@ describe 'wget' do
     it { should contain_package('wget') }
   end
 
+  context 'running on Suse' do
+    let(:facts) { {:osfamily => 'Suse'} }
+
+    it { should contain_package('wget') }
+  end
+
+
   context 'running on Solaris' do
     let (:facts) { {:osfamily => 'Solaris', :kenerlrelease => '5.9'} }
 
