@@ -17,6 +17,12 @@ define wget::authfetch (
 
   include wget
 
+  if $::osfamily == 'Solaris' {
+    $default_path = '/usr/sfw/bin:/usr/bin:/usr/sbin:/bin:/usr/local/bin:/opt/local/bin'
+  } else {
+    $default_path = '/usr/bin:/usr/sbin:/bin:/usr/local/bin:/opt/local/bin'
+  }
+
   if $::http_proxy {
     $environment = [ "HTTP_PROXY=${::http_proxy}", "http_proxy=${::http_proxy}", "WGETRC=/tmp/wgetrc-${name}" ]
   }
@@ -52,7 +58,7 @@ define wget::authfetch (
     timeout     => $timeout,
     unless      => "test -s ${destination}",
     environment => $environment,
-    path        => '/usr/bin:/usr/sbin:/bin:/usr/local/bin:/opt/local/bin',
+    path        => $default_path,
     require     => Class['wget'],
   }
 }

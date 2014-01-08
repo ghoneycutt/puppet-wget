@@ -9,10 +9,23 @@ describe 'wget' do
   end
 
   context 'running on CentOS' do
-    let(:facts) { {:operatingsystem => 'CentOS'} }
+    let(:facts) { {:osfamily => 'Redhat'} }
 
     it { should contain_package('wget') }
   end
+
+  context 'running on Solaris' do
+    let (:facts) { {:osfamily => 'Solaris', :kenerlrelease => '5.9'} }
+
+    it { should contain_package([ 'SUNWwgetr', 'SUNWwgetu' ]) }
+  end
+
+  context 'running on Solaris' do
+    let (:facts) { {:osfamily => 'Solaris', :kenerlrelease => '5.11'} }
+
+    it { should contain_package('SUNWwget') }
+  end
+
 
   context 'no version specified' do
     it { should contain_package('wget').with_ensure('installed') }

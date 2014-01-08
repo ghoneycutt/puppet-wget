@@ -14,6 +14,12 @@ define wget::fetch (
 
   include wget
 
+  if $::osfamily == 'Solaris' {
+    $default_path = '/usr/sfw/bin:/usr/bin:/usr/sbin:/bin:/usr/local/bin:/opt/local/bin'
+  } else {
+    $default_path = '/usr/bin:/usr/sbin:/bin:/usr/local/bin:/opt/local/bin'
+  }
+
   # using "unless" with test instead of "creates" to re-attempt download
   # on empty files.
   # wget creates an empty file when a download fails, and then it wouldn't try
@@ -34,7 +40,7 @@ define wget::fetch (
     timeout     => $timeout,
     unless      => "test -s ${destination}",
     environment => $environment,
-    path        => '/usr/bin:/usr/sbin:/bin:/usr/local/bin:/opt/local/bin',
+    path        => $default_path,
     require     => Class['wget'],
   }
 }

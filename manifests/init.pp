@@ -7,10 +7,23 @@
 class wget (
   $version = 'installed',
 ) {
-
-  if $::operatingsystem != 'Darwin' {
-    package { 'wget':
-      ensure => $version,
+  case $::osfamily {
+    'RedHat', 'Debian': {
+      $default_package = 'wget'
+    }
+    'Solaris': {
+      if $::kernelrelease == '5.11' {
+        $default_package = 'SUNWwget'
+      } else {
+        $default_package = [ 'SUNWwgetr', 'SUNWwgetu' ]
+      }
+    }
+    default: {
+      fail( "wget package didn't available for your system" )
     }
   }
+    package { 'wget':
+      name => $default_package,
+      ensure  => $version,
+    }
 }
