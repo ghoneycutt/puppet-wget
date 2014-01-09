@@ -1,9 +1,7 @@
 source "https://rubygems.org"
 
-group :rake do
-  gem 'puppet',       '~>2.7.17'
-  gem 'rspec-puppet', '>=0.1.3'
-  gem 'rake',         '>=0.9.2.2'
-  gem 'puppet-lint',  '~>0.1.12'
-  gem 'puppetlabs_spec_helper'
-end
+puppetversion = ENV.key?('PUPPET_VERSION') ? "= #{ENV['PUPPET_VERSION']}" : ['>= 2.7']
+gem 'puppet', puppetversion
+gem 'puppetlabs_spec_helper', '>= 0.1.0'
+gem 'puppet-lint', '>= 0.3.2'
+gem 'facter', '>= 1.7.0', "< 1.8.0"
