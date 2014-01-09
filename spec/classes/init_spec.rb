@@ -31,8 +31,8 @@ describe 'wget' do
 
   context 'running on Solaris 9' do
     let(:facts) do
-      { :osfamily => 'Solaris',
-        :kenerlrelease => '5.9',
+      { :osfamily      => 'Solaris',
+        :kernelrelease => '5.9',
       }
     end
 
@@ -46,8 +46,8 @@ describe 'wget' do
 
   context 'running on Solaris 10' do
     let(:facts) do
-      { :osfamily => 'Solaris',
-        :kenerlrelease => '5.10',
+      { :osfamily      => 'Solaris',
+        :kernelrelease => '5.10',
       }
     end
 
@@ -61,7 +61,7 @@ describe 'wget' do
 
   context 'running on Solaris 11' do
     let(:facts) do
-      { :osfamily => 'Solaris',
+      { :osfamily      => 'Solaris',
         :kernelrelease => '5.11',
       }
     end
@@ -73,7 +73,6 @@ describe 'wget' do
       })
     }
   end
-
 
   context 'no version specified' do
     let(:facts) { { :osfamily => 'RedHat' } }
