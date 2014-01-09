@@ -1,11 +1,9 @@
-################################################################################
-# Definition: wget::authfetch
+# == Define: wget::authfetch
 #
-# This class will download files from the internet.  You may define a web proxy
-# using $::http_proxy if necessary. Username must be provided. And the user's
-# password must be stored in the password variable within the .wgetrc file.
+# This class will download files. You may define a web proxy using
+# $::http_proxy. Username must be provided. And the user's password must be
+# stored in the password variable within the .wgetrc file.
 #
-################################################################################
 define wget::authfetch (
   $source,
   $destination,
@@ -52,7 +50,9 @@ define wget::authfetch (
     owner   => 'root',
     mode    => '0600',
     content => $wgetrc_content,
-  } ->
+    before  => Exec["wget-${name}"],
+  }
+
   exec { "wget-${name}":
     command     => "wget ${verbose_option} --user=${user} --output-document=${destination} ${source}",
     timeout     => $timeout,

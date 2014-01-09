@@ -1,14 +1,13 @@
-################################################################################
-# Class: wget
+# == Class: wget
 #
-# This class will install wget - a tool used to download content from the web.
+# This class will install wget - a tool used to download content.
 #
-################################################################################
 class wget (
   $version = 'installed',
 ) {
+
   case $::osfamily {
-    'RedHat', 'Debian', 'Suse': {
+    'Debian', 'RedHat', 'Suse': {
       $default_package = 'wget'
     }
     'Solaris': {
@@ -19,11 +18,12 @@ class wget (
       }
     }
     default: {
-      fail( "wget package didn't available for your system" )
+      fail("wget supports osfamilies Debian, RedHat, Solaris and Suse. Detected osfamily is <${::osfamily}>.")
     }
   }
-    package { 'wget':
-      name => $default_package,
-      ensure  => $version,
-    }
+
+  package { 'wget':
+    ensure => $version,
+    name   => $default_package,
+  }
 }
