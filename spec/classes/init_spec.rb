@@ -74,6 +74,30 @@ describe 'wget' do
     }
   end
 
+  context 'running on unsupported version of Solaris' do
+    let(:facts) do
+      { :osfamily      => 'Solaris',
+        :kernelrelease => '5.8',
+      }
+    end
+
+    it 'should fail' do
+      expect {
+        should contain_class('wget')
+      }.to raise_error(Puppet::Error,/wget supports Solaris with kernelreleases 5.9, 5.10 and 5.11. Detected kernelrelease is <5.8>./)
+    end
+  end
+
+  context 'running on unsupported osfamily' do
+    let(:facts) { { :osfamily => 'Unsupported' } }
+
+    it 'should fail' do
+      expect {
+        should contain_class('wget')
+      }.to raise_error(Puppet::Error,/wget supports osfamilies Darwin, Debian, RedHat, Solaris and Suse. Detected osfamily is <Unsupported>./)
+    end
+  end
+
   context 'no version specified' do
     let(:facts) { { :osfamily => 'RedHat' } }
 

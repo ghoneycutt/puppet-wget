@@ -12,10 +12,16 @@ class wget (
       $default_package = 'wget'
     }
     'Solaris': {
-      if $::kernelrelease == '5.11' {
-        $default_package = 'SUNWwget'
-      } else {
-        $default_package = [ 'SUNWwgetr', 'SUNWwgetu' ]
+      case $::kernelrelease {
+        '5.9', '5.10': {
+          $default_package = [ 'SUNWwgetr', 'SUNWwgetu' ]
+        }
+        '5.11': {
+          $default_package = 'SUNWwget'
+        }
+        default: {
+          fail("wget supports Solaris with kernelreleases 5.9, 5.10 and 5.11. Detected kernelrelease is <${::kernelrelease}>.")
+        }
       }
     }
     default: {
