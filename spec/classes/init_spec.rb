@@ -9,7 +9,7 @@ describe 'wget' do
   end
 
   context 'running on CentOS' do
-    let(:facts) { {:osfamily => 'Redhat'} }
+    let(:facts) { {:osfamily => 'RedHat'} }
 
     it { should contain_package('wget') }
   end
