@@ -1,11 +1,9 @@
-################################################################################
-# Definition: wget::authfetch
+# == Define: wget::authfetch
 #
-# This class will download files from the internet.  You may define a web proxy
-# using $::http_proxy if necessary. Username must be provided. And the user's
-# password must be stored in the password variable within the .wgetrc file.
+# This class will download files. You may define a web proxy using
+# $::http_proxy. Username must be provided. And the user's password must be
+# stored in the password variable within the .wgetrc file.
 #
-################################################################################
 define wget::authfetch (
   $source,
   $destination,
@@ -16,6 +14,12 @@ define wget::authfetch (
 ) {
 
   include wget
+
+  if $::osfamily == 'Solaris' {
+    $default_path = '/usr/sfw/bin:/usr/bin:/usr/sbin:/bin:/usr/local/bin:/opt/local/bin'
+  } else {
+    $default_path = '/usr/bin:/usr/sbin:/bin:/usr/local/bin:/opt/local/bin'
+  }
 
   if $::http_proxy {
     $environment = [ "HTTP_PROXY=${::http_proxy}", "http_proxy=${::http_proxy}", "WGETRC=/tmp/wgetrc-${name}" ]
@@ -46,13 +50,15 @@ define wget::authfetch (
     owner   => 'root',
     mode    => '0600',
     content => $wgetrc_content,
-  } ->
+    before  => Exec["wget-${name}"],
+  }
+
   exec { "wget-${name}":
     command     => "wget ${verbose_option} --user=${user} --output-document=${destination} ${source}",
     timeout     => $timeout,
     unless      => "test -s ${destination}",
     environment => $environment,
-    path        => '/usr/bin:/usr/sbin:/bin:/usr/local/bin:/opt/local/bin',
+    path        => $default_path,
     require     => Class['wget'],
   }
 }

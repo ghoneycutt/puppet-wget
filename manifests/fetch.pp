@@ -1,10 +1,7 @@
-################################################################################
-# Definition: wget::fetch
+# == Define: wget::fetch
 #
-# This class will download files from the internet.  You may define a web proxy
-# using $http_proxy if necessary.
+# This class will download file. You may define a web proxy using $http_proxy.
 #
-################################################################################
 define wget::fetch (
   $source,
   $destination,
@@ -13,6 +10,12 @@ define wget::fetch (
 ) {
 
   include wget
+
+  if $::osfamily == 'Solaris' {
+    $default_path = '/usr/sfw/bin:/usr/bin:/usr/sbin:/bin:/usr/local/bin:/opt/local/bin'
+  } else {
+    $default_path = '/usr/bin:/usr/sbin:/bin:/usr/local/bin:/opt/local/bin'
+  }
 
   # using "unless" with test instead of "creates" to re-attempt download
   # on empty files.
@@ -34,7 +37,7 @@ define wget::fetch (
     timeout     => $timeout,
     unless      => "test -s ${destination}",
     environment => $environment,
-    path        => '/usr/bin:/usr/sbin:/bin:/usr/local/bin:/opt/local/bin',
+    path        => $default_path,
     require     => Class['wget'],
   }
 }
