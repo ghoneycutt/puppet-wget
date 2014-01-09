@@ -1,9 +1,8 @@
 require 'spec_helper'
-
 describe 'wget' do
 
   context 'running on OS X' do
-    let(:facts) { {:operatingsystem => 'Darwin'} }
+    let(:facts) { {:osfamily => 'Darwin'} }
 
     it { should_not contain_package('wget') }
   end
@@ -19,7 +18,6 @@ describe 'wget' do
 
     it { should contain_package('wget') }
   end
-
 
   context 'running on Solaris' do
     let (:facts) { {:osfamily => 'Solaris', :kenerlrelease => '5.9'} }

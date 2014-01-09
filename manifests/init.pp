@@ -7,6 +7,7 @@ class wget (
 ) {
 
   case $::osfamily {
+    'Darwin': { }
     'Debian', 'RedHat', 'Suse': {
       $default_package = 'wget'
     }
@@ -18,12 +19,14 @@ class wget (
       }
     }
     default: {
-      fail("wget supports osfamilies Debian, RedHat, Solaris and Suse. Detected osfamily is <${::osfamily}>.")
+      fail("wget supports osfamilies Darwin, Debian, RedHat, Solaris and Suse. Detected osfamily is <${::osfamily}>.")
     }
   }
 
-  package { 'wget':
-    ensure => $version,
-    name   => $default_package,
+  if $::osfamily != 'Darwin' {
+    package { 'wget':
+      ensure => $version,
+      name   => $default_package,
+    }
   }
 }
